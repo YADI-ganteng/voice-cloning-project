@@ -6,6 +6,7 @@ on:
     paths:
       - 'voice_sample/**'
       - 'cerita/**'
+      - 'tortoise_generator.py'
   workflow_dispatch:
 
 permissions:
