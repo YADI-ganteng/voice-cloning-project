@@ -1,0 +1,45 @@
+name: 🐢 Voice Cloning
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'voice_sample/**'
+      - 'cerita/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  voice-cloning:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: Install system deps
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg git
+    
+    - name: Generate Voice Clone
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python tortoise_generator.py
+    
+    - name: Upload MP3
+      uses: actions/upload-artifact@v4
+      with:
+        name: voice-clone-result
+        path: output/*.mp3
+        retention-days: 7
+        if-no-files-found: ignore
