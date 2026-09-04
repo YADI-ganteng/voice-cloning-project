@@ -1,0 +1,34 @@
+name: 🎤 Generate MP3
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  generate-mp3:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install gTTS
+    
+    - name: Generate MP3
+      run: |
+        python voice_cloning.py
+    
+    - name: Upload MP3
+      uses: actions/upload-artifact@v4
+      with:
+        name: hasil-mp3
+        path: output/*.mp3
+        retention-days: 7
